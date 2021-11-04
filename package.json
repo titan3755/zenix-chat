@@ -14,8 +14,5 @@
     "mongoose": "^6.0.12",
     "nodemon": "^2.0.14",
     "socket.io": "^4.3.1"
-  },
-  "engines": {
-    "node": "16,x"
   }
 }
