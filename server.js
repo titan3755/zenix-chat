@@ -7,11 +7,12 @@ const server = require('http').createServer(app)
 const io = require('socket.io')(server, {
     cors: {origin: '*'}
 })
+const PORT = process.env.PORT || 4000
 
 mongoose.connect('mongodb+srv://mahmudTest:Amimuhaimin123@apidatabase.als7u.mongodb.net/APIDatabase?retryWrites=true&w=majority')
     .then(() => {
         console.log('Successfully connected to DB!')
-        server.listen(4000, () => {
+        server.listen(PORT, () => {
             console.log('Server listening on port 4000!')
             io.on('connection', async (socket) => {
                 let initialData = await Message.find({})
