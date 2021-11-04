@@ -1,9 +1,12 @@
 const mongoose = require('mongoose')
 const Message = require('./models/message')
 const express = require('express')
+const cors = require('cors')
 const app = express()
 const server = require('http').createServer(app)
-const io = require('socket.io')(server, {cors: {origin: 'http://localhost:3000'}})
+const io = require('socket.io')(server, {
+    cors: {origin: '*'}
+})
 
 mongoose.connect('mongodb+srv://mahmudTest:Amimuhaimin123@apidatabase.als7u.mongodb.net/APIDatabase?retryWrites=true&w=majority')
     .then(() => {
@@ -24,3 +27,11 @@ mongoose.connect('mongodb+srv://mahmudTest:Amimuhaimin123@apidatabase.als7u.mong
     .catch(() => {
         console.log('Failed to connect to DB!')
     })
+
+app.get('/', (req, res) => {
+    res.json({
+        status: res.statusCode,
+        condition: 'App is working correctly!',
+        desc: 'This app is an API for interacting with the Zenix chat application'
+    })
+})
