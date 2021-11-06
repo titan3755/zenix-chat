@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const Message = require('./models/message')
+const User = require('./models/user')
 const express = require('express')
 const cors = require('cors')
 const app = express()
@@ -14,7 +15,19 @@ mongoose.connect('mongodb+srv://mahmudTest:Amimuhaimin123@apidatabase.als7u.mong
         console.log('Successfully connected to DB!')
         server.listen(PORT, () => {
             console.log('Server listening on port 4000!')
-            io.on('connection', async (socket) => {
+            io.sockets.on('connection', async (socket) => {
+                socket.on('userJoined', async (username, id) => {
+                    let res = await User.create({username: username, user_id: id})
+                    let userData = await User.find({})
+                    socket.id = id
+                    socket.username = username
+                    io.emit('userList', userData)
+                })
+                socket.on('disconnect', async () => {
+                    let res = await User.deleteMany({username: socket.username})
+                    let userData = await User.find({})
+                    io.emit('userList', userData)
+                })
                 let initialData = await Message.find({})
                 io.emit('initialData', initialData)
                 socket.on('msgSend', async (msg, author) => {
